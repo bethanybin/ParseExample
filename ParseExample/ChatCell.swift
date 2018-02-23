@@ -7,11 +7,23 @@
 //
 
 import UIKit
+import Parse
 
 class ChatCell: UITableViewCell {
 
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
+    
+    var message: PFObject! {
+        didSet {
+            messageLabel.text = message.object(forKey: "text") as? String
+            if let user = message.object(forKey: "user") as? PFUser{
+                usernameLabel.text = user.username
+            } else {
+                usernameLabel.text = "🤖"
+            }
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

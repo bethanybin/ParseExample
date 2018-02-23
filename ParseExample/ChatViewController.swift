@@ -8,13 +8,13 @@
 
 import UIKit
 import Parse
-class ChatViewController: UIViewController, UITableViewDataSource{
+class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 
   
     var messages: [PFObject]? = []
-    let chatMessage = PFObject(className: "Message")
     @IBOutlet weak var textMessageField: UITextField!
     @IBAction func sendButton(_ sender: Any) {
+        let chatMessage = PFObject(className: "Message")
         chatMessage["text"] = textMessageField.text ?? ""
         chatMessage["user"] = PFUser.current()
         chatMessage.saveInBackground { (success, error) in
@@ -30,8 +30,9 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 50
+        tableView.estimatedRowHeight = 100
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.refresh), userInfo: nil, repeats: true)
 
     }
@@ -47,36 +48,32 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        if let messages = messages {
+            return messages.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
-        if let user = chatMessage["user"] as? PFUser {
-            // User found! update username label with username
-            cell.usernameLabel.text = user.username
-        } else {
-            // No user found, set default username
-            cell.usernameLabel.text = "🤖"
-        }
-        //cell.messageLabel.text = self.messages?[indexPath.row]["text"] as? String
+        cell.message = self.messages?[indexPath.row]
         return cell
     }
     
     
     @objc func refresh(){
-        let query = PFQuery(className: "Messages")
+        let query = PFQuery(className: "Message")
         query.includeKey("user")
         query.addDescendingOrder("createdAt")
-        query.findObjectsInBackground { (messages: [PFObject]?, error: Error?) in
-            if error == nil{
-                    self.messages = messages
-                    self.tableView.reloadData()
-                
+        query.findObjectsInBackground { (messages: [PFObject]?, error: Error?) -> Void in
+            if error == nil {
+                self.messages = messages
+                self.tableView.reloadData()
+            } else {
+                print("\(String(describing: error?.localizedDescription))")
             }
-            self.tableView.reloadData()
         }
-        
     }
 
     /*

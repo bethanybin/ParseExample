@@ -11,7 +11,7 @@ The following **required** user stories are complete:
 - [x] User can sign up and sign in to the login screen (+1pt)
 - [x] User sees alerts for login exceptions, i.e. "account already exists", "wrong credentials", etc. (+1pt)
 - [x] User can compose and send chat messages (+2pt)
-- [ ] User can view a list of chat messages in chronological order (+2pt)
+- [x] User can view a list of chat messages in chronological order (+2pt)
 - [x] Automatically Adjust Cell Size to Fit Text (+1pt)
 - [x] Username of chat author is displayed in each chat message (+2pt)
 - [x] Persist Logged in User (+1pt)
@@ -37,7 +37,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/CId70Cs.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/EyzoBG6.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
