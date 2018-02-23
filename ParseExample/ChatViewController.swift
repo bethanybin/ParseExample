@@ -11,7 +11,7 @@ import Parse
 class ChatViewController: UIViewController, UITableViewDataSource{
 
   
-    var messages: [PFObject] = []
+    var messages: [PFObject]? = []
     let chatMessage = PFObject(className: "Message")
     @IBOutlet weak var textMessageField: UITextField!
     @IBAction func sendButton(_ sender: Any) {
@@ -47,7 +47,7 @@ class ChatViewController: UIViewController, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
+        return 20
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,6 +59,7 @@ class ChatViewController: UIViewController, UITableViewDataSource{
             // No user found, set default username
             cell.usernameLabel.text = "🤖"
         }
+        //cell.messageLabel.text = self.messages?[indexPath.row]["text"] as? String
         return cell
     }
     
@@ -69,11 +70,9 @@ class ChatViewController: UIViewController, UITableViewDataSource{
         query.addDescendingOrder("createdAt")
         query.findObjectsInBackground { (messages: [PFObject]?, error: Error?) in
             if error == nil{
-                if let messages = messages{
                     self.messages = messages
-                    print(messages.count)
                     self.tableView.reloadData()
-                }
+                
             }
             self.tableView.reloadData()
         }
